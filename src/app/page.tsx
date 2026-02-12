@@ -2,6 +2,10 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 
 export default function Home() {
   const [isLogin, setIsLogin] = useState(true)
@@ -33,7 +37,6 @@ export default function Home() {
         throw new Error(data.error || 'Something went wrong')
       }
 
-      // Store API key in localStorage
       localStorage.setItem('vibeless_api_key', data.apiKey)
       localStorage.setItem('vibeless_user', JSON.stringify(data))
 
@@ -46,77 +49,95 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0a0a0f] flex items-center justify-center p-4">
-      <div className="w-full max-w-md">
+    <div className="min-h-screen bg-slate-950 flex items-center justify-center p-4">
+      <div className="w-full max-w-sm">
+        {/* Logo */}
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-white mb-2">Vibeless</h1>
-          <p className="text-gray-400">AI-powered coding companion</p>
-        </div>
-
-        <div className="bg-[#12121a] rounded-2xl p-8 border border-gray-800">
-          <div className="flex mb-6">
-            <button
-              onClick={() => setIsLogin(true)}
-              className={`flex-1 py-2 text-sm font-medium rounded-lg transition ${
-                isLogin ? 'bg-blue-600 text-white' : 'text-gray-400 hover:text-white'
-              }`}
-            >
-              Login
-            </button>
-            <button
-              onClick={() => setIsLogin(false)}
-              className={`flex-1 py-2 text-sm font-medium rounded-lg transition ${
-                !isLogin ? 'bg-blue-600 text-white' : 'text-gray-400 hover:text-white'
-              }`}
-            >
-              Sign Up
-            </button>
+          <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-blue-600 mb-4">
+            <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+            </svg>
           </div>
-
-          <form onSubmit={handleSubmit} className="space-y-4">
-            {!isLogin && (
-              <input
-                type="text"
-                placeholder="Name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                className="w-full px-4 py-3 bg-[#1a1a24] border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-blue-500"
-              />
-            )}
-            <input
-              type="email"
-              placeholder="Email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              className="w-full px-4 py-3 bg-[#1a1a24] border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-blue-500"
-            />
-            <input
-              type="password"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              className="w-full px-4 py-3 bg-[#1a1a24] border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-blue-500"
-            />
-
-            {error && (
-              <p className="text-red-400 text-sm">{error}</p>
-            )}
-
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition disabled:opacity-50"
-            >
-              {loading ? 'Loading...' : isLogin ? 'Login' : 'Create Account'}
-            </button>
-          </form>
+          <h1 className="text-2xl font-semibold text-white">Vibeless</h1>
+          <p className="text-slate-400 text-sm mt-1">AI coding companion</p>
         </div>
 
-        <p className="text-center text-gray-500 text-sm mt-6">
-          Download the desktop app to start coding with AI assistance
-        </p>
+        <Card className="bg-slate-900 border-slate-800">
+          <CardHeader className="space-y-1 pb-4">
+            <CardTitle className="text-lg text-white">
+              {isLogin ? 'Welcome back' : 'Create account'}
+            </CardTitle>
+            <CardDescription className="text-slate-400">
+              {isLogin ? 'Sign in to your account' : 'Get started with Vibeless'}
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={handleSubmit} className="space-y-4">
+              {!isLogin && (
+                <div className="space-y-2">
+                  <Label htmlFor="name" className="text-slate-300">Name</Label>
+                  <Input
+                    id="name"
+                    type="text"
+                    placeholder="John Doe"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    className="bg-slate-800 border-slate-700 text-white placeholder:text-slate-500 focus-visible:ring-blue-600"
+                  />
+                </div>
+              )}
+
+              <div className="space-y-2">
+                <Label htmlFor="email" className="text-slate-300">Email</Label>
+                <Input
+                  id="email"
+                  type="email"
+                  placeholder="you@example.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  className="bg-slate-800 border-slate-700 text-white placeholder:text-slate-500 focus-visible:ring-blue-600"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="password" className="text-slate-300">Password</Label>
+                <Input
+                  id="password"
+                  type="password"
+                  placeholder="••••••••"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  className="bg-slate-800 border-slate-700 text-white placeholder:text-slate-500 focus-visible:ring-blue-600"
+                />
+              </div>
+
+              {error && (
+                <p className="text-sm text-red-400 bg-red-400/10 px-3 py-2 rounded-md">
+                  {error}
+                </p>
+              )}
+
+              <Button
+                type="submit"
+                disabled={loading}
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white"
+              >
+                {loading ? 'Loading...' : isLogin ? 'Sign in' : 'Create account'}
+              </Button>
+            </form>
+
+            <div className="mt-6 text-center">
+              <button
+                onClick={() => setIsLogin(!isLogin)}
+                className="text-sm text-slate-400 hover:text-white transition"
+              >
+                {isLogin ? "Don't have an account? Sign up" : 'Already have an account? Sign in'}
+              </button>
+            </div>
+          </CardContent>
+        </Card>
       </div>
     </div>
   )

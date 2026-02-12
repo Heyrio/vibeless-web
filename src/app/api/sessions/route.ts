@@ -15,6 +15,10 @@ export async function GET(req: NextRequest) {
 
     const sessions = await prisma.session.findMany({
       where: { userId: user.id },
+      include: {
+        learningMoments: true,
+        flashcards: true,
+      },
       orderBy: { createdAt: 'desc' },
       take: 50,
     })
