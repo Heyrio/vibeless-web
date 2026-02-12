@@ -1,0 +1,72 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  name          String?
+  password      String
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  sessions      Session[]
+  flashcards    Flashcard[]
+  apiKey        String?   @unique @default(cuid())
+}
+
+model Session {
+  id            String    @id @default(cuid())
+  userId        String
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  title         String?
+  summary       String?
+  transcript    String?   // JSON array of messages
+  duration      Int?      // seconds
+
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  flashcards    Flashcard[]
+  learningMoments LearningMoment[]
+}
+
+model Flashcard {
+  id            String    @id @default(cuid())
+  userId        String
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  sessionId     String?
+  session       Session?  @relation(fields: [sessionId], references: [id], onDelete: SetNull)
+
+  front         String    // Question/problem
+  back          String    // Answer/solution
+  category      String?   // e.g., "React", "TypeScript", "Git"
+
+  // Spaced repetition fields
+  easeFactor    Float     @default(2.5)
+  interval      Int       @default(1)  // days until next review
+  repetitions   Int       @default(0)
+  nextReview    DateTime  @default(now())
+  lastReview    DateTime?
+
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+model LearningMoment {
+  id            String    @id @default(cuid())
+  sessionId     String
+  session       Session   @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  type          String    // "concept", "error_fix", "pattern", "tip"
+  content       String    // What was learned
+  context       String?   // Code context when it happened
+  timestamp     Int?      // Seconds into session
+
+  createdAt     DateTime  @default(now())
+}
