@@ -20,7 +20,6 @@ import {
   Settings,
   LogOut,
   ChevronDown,
-  Zap,
 } from 'lucide-react'
 
 interface SidebarProps {
@@ -50,11 +49,12 @@ export function Sidebar({ user }: SidebarProps) {
   return (
     <aside className="fixed inset-y-0 left-0 z-50 flex w-64 flex-col border-r border-border bg-card">
       {/* Logo */}
-      <div className="flex h-16 items-center gap-2 px-6">
-        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-foreground">
-          <Zap className="h-4 w-4 text-background" />
-        </div>
-        <span className="text-lg font-semibold tracking-tight">Vibeless</span>
+      <div className="flex h-20 items-center justify-center px-4">
+        <img
+          src="/vibeless.png"
+          alt="Vibeless"
+          className="h-14 w-auto object-contain"
+        />
       </div>
 
       <Separator />
